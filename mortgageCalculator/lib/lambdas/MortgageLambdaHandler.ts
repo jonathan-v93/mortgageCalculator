@@ -22,7 +22,9 @@ export const MortgageLambdaHandler: Handler<
   ) {
     return {
       statusCode: StatusCodeEnum.BadRequest,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: validationResponse.error ?? ErrorCodeEnum.ParamValidationError,
     };
   }
@@ -32,7 +34,7 @@ export const MortgageLambdaHandler: Handler<
     mortgageCalculator.calculatePerPaymentSchedue();
 
   return {
-    statusCode: StatusCodeEnum.BadRequest,
+    statusCode: StatusCodeEnum.Success,
     headers: { "Content-Type": "application/json" },
     body: `${perPaymentScheduleAmount}`,
   };

@@ -15,7 +15,7 @@ if (typeof process.env.AWS_REGION === "undefined") {
 }
 
 if (typeof process.env.AWS_ACCOUNT_ID === "undefined") {
-  throw new Error("AWS_ACCOUNT variable not set");
+  throw new Error("AWS_ACCOUNT_ID variable not set");
 }
 
 const app = new cdk.App();
