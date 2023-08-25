@@ -28,13 +28,14 @@ export class MortgageLambda extends Construct {
       timeout: Duration.minutes(1),
       memorySize: 512,
     });
+
     const httpLambdaIntegration = new HttpLambdaIntegration(
       "httpLambdaIntegration",
       this.lambda
     );
 
     props.httpApi.addRoutes({
-      path: "/test",
+      path: "/mortgageCalculator",
       methods: [apigwv2.HttpMethod.ANY],
       integration: httpLambdaIntegration,
     });
