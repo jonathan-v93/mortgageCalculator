@@ -10,10 +10,10 @@ Recomended version: v20.5.1
 
 # Testing
 To test you will need to install dependencies
-run `npm i` - from the `motgageCalculator` directory
+run `npm i` - from the `mortgageCalculator` directory
 
 Then you can run 
-run `npm t`- from the `motgageCalculator` directory
+run `npm t`- from the `mortgageCalculator` directory
 
 
 # Paramaters
