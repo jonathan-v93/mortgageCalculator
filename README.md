@@ -5,6 +5,16 @@ Currently hosted on AWS as a API Gateway triggered lambda.
 
 URL = "https://tza2ahe76k.execute-api.us-west-1.amazonaws.com/mortgageCalculator"
 
+# Node version
+Recomended version: v20.5.1
+
+# Testing
+To test you will need to install dependencies
+run `npm i` - from the `motgageCalculator` directory
+
+Then you can run 
+run `npm t`- from the `motgageCalculator` directory
+
 
 # Paramaters
 propertyPrice    -> Cannot be 0
