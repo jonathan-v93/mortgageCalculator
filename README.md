@@ -24,7 +24,7 @@ paymentSchedule  -> 1: accelerated bi-weeky, 2: bi-weekly or 3: monthly
 
 
 # To run UI locally
-Clone the Repo down from `https://github.com/jonathan-v93/mortage-calculator-ui`
+Clone the Repo down from `https://github.com/jonathan-v93/mortgage-calculator-ui`
 
 run `npm i` in the repo's root directory
 
