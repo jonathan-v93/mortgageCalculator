@@ -18,7 +18,7 @@ export class MortgageCalculator {
       case PaymentScheduleEnum.AcceleratedBiWeekly:
         return 26;
       case PaymentScheduleEnum.BiWeekly:
-        return 26;
+        return 24;
       case PaymentScheduleEnum.Monthly:
         return 12;
       default:
@@ -31,16 +31,16 @@ export class MortgageCalculator {
       this.mortgageParams.propertyPrice - this.mortgageParams.downPayment;
 
     // AnnualInterest will be a decimal representing a percentage for the year, we need the amount per payment schedule eg. Monthly = 0.005 => /12 => 0.000416
-    const monthlyInterest =
+    const interestPerPayment =
       this.mortgageParams.annualInterest / this.numberOfPaymentsPerAnum;
 
     // Length of mortgage is in years, we need per payment schedule for this formula
-    const numberOfMonths =
+    const numberOfpayments =
       this.mortgageParams.lengthOfMortgage * this.numberOfPaymentsPerAnum;
 
     const numerator =
-      monthlyInterest * Math.pow(1 + monthlyInterest, numberOfMonths);
-    const denominator = Math.pow(1 + monthlyInterest, numberOfMonths) - 1;
+      interestPerPayment * Math.pow(1 + interestPerPayment, numberOfpayments);
+    const denominator = Math.pow(1 + interestPerPayment, numberOfpayments) - 1;
     return loanAmount * (numerator / denominator);
   }
 }
