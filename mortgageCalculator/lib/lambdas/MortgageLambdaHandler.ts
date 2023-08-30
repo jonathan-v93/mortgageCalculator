@@ -6,8 +6,8 @@ import {
 import { ValidationResponse } from "../../models/ValidationReponse";
 import { EventParameterValidator } from "./constructs/EventParameterValidator";
 import { MortgageCalculator } from "./constructs/MortgageCalculator";
-import { ErrorCodeEnum } from "../../enums/ErrorMessageEnum";
-import { StatusCodeEnum } from "../../enums/StatusCodeEnum";
+import { ErrorMessageEnum } from "../../enums/ErrorMessage.enum";
+import { StatusCodeEnum } from "../../enums/StatusCode.enum";
 
 export const MortgageLambdaHandler: Handler<
   APIGatewayProxyEventV2,
@@ -25,13 +25,13 @@ export const MortgageLambdaHandler: Handler<
       headers: {
         "Content-Type": "application/json",
       },
-      body: validationResponse.error ?? ErrorCodeEnum.ParamValidationError,
+      body: validationResponse.error ?? ErrorMessageEnum.ParamValidationError,
     };
   }
 
   const mortgageCalculator = new MortgageCalculator(validationResponse.data);
   const perPaymentScheduleAmount =
-    mortgageCalculator.calculatePerPaymentSchedue();
+    mortgageCalculator.calculatePerPaymentSchedule();
 
   return {
     statusCode: StatusCodeEnum.Success,

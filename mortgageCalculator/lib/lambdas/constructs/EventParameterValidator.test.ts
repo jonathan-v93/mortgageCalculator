@@ -5,7 +5,7 @@ import {
 } from "aws-lambda";
 import { EventParameterValidator } from "./EventParameterValidator";
 import { ValidationResponse } from "../../../models/ValidationReponse";
-import { ErrorCodeEnum } from "../../../enums/ErrorMessageEnum";
+import { ErrorMessageEnum } from "../../../enums/ErrorMessage.enum";
 
 const headers: APIGatewayProxyEventHeaders = {};
 const requestContext: APIGatewayEventRequestContextV2 = {
@@ -162,7 +162,7 @@ describe("EventParameterValidation tests", () => {
     const response: ValidationResponse = validator.validate();
     expect(validator.paymentSchedule).toBe(4);
     expect(response.success).toBe(false);
-    expect(response.error).toBe(ErrorCodeEnum.PaymentScheduleError);
+    expect(response.error).toBe(ErrorMessageEnum.PaymentScheduleError);
   });
 
   it("Validates that all values are more than 0 - fail", () => {
@@ -191,7 +191,7 @@ describe("EventParameterValidation tests", () => {
     expect(validator.downPayment).toBe(0);
     expect(validator.annualInterest).toBe(0);
     expect(response.success).toBe(false);
-    expect(response.error).toBe(ErrorCodeEnum.MoreThanZero);
+    expect(response.error).toBe(ErrorMessageEnum.MoreThanZero);
   });
 
   it("Validates that the down payment meets the miminum percentage of the property price - fail", () => {
@@ -218,7 +218,7 @@ describe("EventParameterValidation tests", () => {
     expect(validator.propertyPrice).toBe(100);
     expect(response.success).toBe(false);
     expect(response.error).toBe(
-      ErrorCodeEnum.DownPaymentInsufficient + validator.downpaymentPercentage
+      ErrorMessageEnum.DownPaymentInsufficient + validator.downpaymentPercentage
     );
   });
 
@@ -245,7 +245,7 @@ describe("EventParameterValidation tests", () => {
     const response: ValidationResponse = validator.validate();
     expect(validator.lengthOfMortgage).toBe(35);
     expect(response.success).toBe(false);
-    expect(response.error).toBe(ErrorCodeEnum.MortgageLength);
+    expect(response.error).toBe(ErrorMessageEnum.MortgageLength);
   });
 
   it("Validates mortgage length is a multiple of 5 between 5 and 30 - fail", () => {
@@ -271,7 +271,7 @@ describe("EventParameterValidation tests", () => {
     const response: ValidationResponse = validator.validate();
     expect(validator.lengthOfMortgage).toBe(13);
     expect(response.success).toBe(false);
-    expect(response.error).toBe(ErrorCodeEnum.MortgageLength);
+    expect(response.error).toBe(ErrorMessageEnum.MortgageLength);
   });
 
   it("Validates interest rate is between 0 and 1 - fail", () => {
@@ -297,7 +297,7 @@ describe("EventParameterValidation tests", () => {
     const response: ValidationResponse = validator.validate();
     expect(validator.annualInterest).toBe(2.78);
     expect(response.success).toBe(false);
-    expect(response.error).toBe(ErrorCodeEnum.InterestInvalid);
+    expect(response.error).toBe(ErrorMessageEnum.InterestInvalid);
   });
 
   it("Responds with correct data object", () => {

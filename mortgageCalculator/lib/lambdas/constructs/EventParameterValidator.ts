@@ -1,8 +1,8 @@
 import { APIGatewayProxyEventV2 } from "aws-lambda";
 import { ValidationResponse } from "../../../models/ValidationReponse";
 import { MortgageQueryParms } from "../../../models/MortgageQueryParms";
-import { ErrorCodeEnum } from "../../../enums/ErrorMessageEnum";
-import { PaymentScheduleEnum } from "../../../enums/PaymentScheduleEnum";
+import { ErrorMessageEnum } from "../../../enums/ErrorMessage.enum";
+import { PaymentScheduleEnum } from "../../../enums/PaymentSchedule.enum";
 
 export class EventParameterValidator implements MortgageQueryParms {
   minimumDownPaymentPercent: number = 10; // Move this to process.env.MINIMUM_DOWNPAYMENT_PERCENTAGE
@@ -68,23 +68,23 @@ export class EventParameterValidator implements MortgageQueryParms {
       success: false,
     };
     if (!this.validatePaymentSchedule()) {
-      response.error = ErrorCodeEnum.PaymentScheduleError;
+      response.error = ErrorMessageEnum.PaymentScheduleError;
       return response;
     }
     if (!this.validateMoreThanZero()) {
-      response.error = ErrorCodeEnum.MoreThanZero;
+      response.error = ErrorMessageEnum.MoreThanZero;
       return response;
     }
     if (!this.validatedDownPayment()) {
-      response.error = `${ErrorCodeEnum.DownPaymentInsufficient}${this.downpaymentPercentage}`;
+      response.error = `${ErrorMessageEnum.DownPaymentInsufficient}${this.downpaymentPercentage}`;
       return response;
     }
     if (!this.validateLengthOfMortgage()) {
-      response.error = ErrorCodeEnum.MortgageLength;
+      response.error = ErrorMessageEnum.MortgageLength;
       return response;
     }
     if (!this.validateInterestRate()) {
-      response.error = ErrorCodeEnum.InterestInvalid;
+      response.error = ErrorMessageEnum.InterestInvalid;
       return response;
     }
     response.success = true;

@@ -1,4 +1,4 @@
-import { PaymentScheduleEnum } from "../../../enums/PaymentScheduleEnum";
+import { PaymentScheduleEnum } from "../../../enums/PaymentSchedule.enum";
 import { MortgageQueryParms } from "../../../models/MortgageQueryParms";
 
 export class MortgageCalculator {
@@ -10,7 +10,7 @@ export class MortgageCalculator {
     this.numberOfPaymentsPerAnum = this.convertPaymentSchedule(
       props.paymentSchedule
     );
-    this.calculatePerPaymentSchedue();
+    this.calculatePerPaymentSchedule();
   }
 
   convertPaymentSchedule(paymentSchedule: number): number {
@@ -26,7 +26,7 @@ export class MortgageCalculator {
     }
   }
 
-  calculatePerPaymentSchedue(): number {
+  public calculatePerPaymentSchedule(): number {
     const loanAmount =
       this.mortgageParams.propertyPrice - this.mortgageParams.downPayment;
 

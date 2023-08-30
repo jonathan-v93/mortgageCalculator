@@ -1,4 +1,4 @@
-export enum ErrorCodeEnum {
+export enum ErrorMessageEnum {
   PaymentScheduleError = "Payment schedule must be either 1: accelerated bi-weeky, 2: bi-weekly or 3: monthly",
   MoreThanZero = "All values must be passed and greater than 0.",
   MortgageLength = "Length of mortgage must be a multiple of 5 and between 5 and 30 years.",

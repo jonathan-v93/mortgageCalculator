@@ -6,6 +6,12 @@
       "es2020",
       "dom"
     ],
+    "plugins": [
+      {
+        "transform": "ts-auto-mock/transformer",
+        "cacheBetweenTests": false
+      }
+    ],
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,
