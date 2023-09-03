@@ -22,9 +22,7 @@ export const MortgageLambdaHandler: Handler<
   ) {
     return {
       statusCode: StatusCodeEnum.BadRequest,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: validationResponse.error ?? ErrorMessageEnum.ParamValidationError,
     };
   }
