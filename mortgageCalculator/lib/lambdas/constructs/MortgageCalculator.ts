@@ -40,6 +40,7 @@ export class MortgageCalculator {
     const numerator =
       interestPerPayment * Math.pow(1 + interestPerPayment, numberOfpayments);
     const denominator = Math.pow(1 + interestPerPayment, numberOfpayments) - 1;
-    return loanAmount * (numerator / denominator);
+    const result = loanAmount * (numerator / denominator);
+    return +result.toFixed(2);
   }
 }
