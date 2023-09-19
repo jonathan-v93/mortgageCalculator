@@ -10,7 +10,6 @@ export class MortgageCalculator {
     this.numberOfPaymentsPerAnum = this.convertPaymentSchedule(
       props.paymentSchedule
     );
-    this.calculatePerPaymentSchedule();
   }
 
   convertPaymentSchedule(paymentSchedule: number): number {
