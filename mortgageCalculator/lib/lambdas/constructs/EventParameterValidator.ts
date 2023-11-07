@@ -3,32 +3,26 @@ import { ValidationResponse } from "../../../models/ValidationReponse";
 import { MortgageQueryParms } from "../../../models/MortgageQueryParms";
 import { ErrorMessageEnum } from "../../../enums/ErrorMessage.enum";
 import { PaymentScheduleEnum } from "../../../enums/PaymentSchedule.enum";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class EventParameterValidator implements MortgageQueryParms {
-  minimumDownPaymentPercent: number = 10; // Move this to process.env.MINIMUM_DOWNPAYMENT_PERCENTAGE
+  minimumDownPaymentPercent: number = 10;
   propertyPrice: number;
   downPayment: number;
   annualInterest: number;
   lengthOfMortgage: number;
   paymentSchedule: number;
 
-  constructor(event: APIGatewayProxyEventV2) {
-    const params = event.queryStringParameters;
-    this.propertyPrice = this.convertToNumber(params?.propertyPrice);
-    this.downPayment = this.convertToNumber(params?.downPayment);
-    this.annualInterest = this.convertToNumber(params?.annualInterest);
-    this.lengthOfMortgage = this.convertToNumber(params?.lengthOfMortgage);
-    this.paymentSchedule = this.convertToNumber(params?.paymentSchedule);
-  }
   get downpaymentPercentage() {
     return `${this.minimumDownPaymentPercent}%`;
   }
 
-  convertToNumber(param: string | undefined): number {
+  private convertToNumber(param: string | undefined): number {
     return param !== undefined && param.length > 0 ? +param : 0;
   }
 
-  validatePaymentSchedule(): boolean {
+  private validatePaymentSchedule(): boolean {
     return (
       this.paymentSchedule === +PaymentScheduleEnum.AcceleratedBiWeekly ||
       this.paymentSchedule === +PaymentScheduleEnum.BiWeekly ||
@@ -36,7 +30,7 @@ export class EventParameterValidator implements MortgageQueryParms {
     );
   }
 
-  validateMoreThanZero(): boolean {
+  private validateMoreThanZero(): boolean {
     return (
       this.propertyPrice > 0 &&
       this.downPayment > 0 &&
@@ -45,17 +39,17 @@ export class EventParameterValidator implements MortgageQueryParms {
     );
   }
 
-  validateInterestRate(): boolean {
+  private validateInterestRate(): boolean {
     return this.annualInterest >= 0 && this.annualInterest <= 1;
   }
 
-  validatedDownPayment(): boolean {
+  private validatedDownPayment(): boolean {
     const percentageOfPropertyPrice =
       (this.propertyPrice / 100) * this.minimumDownPaymentPercent;
     return this.downPayment >= percentageOfPropertyPrice;
   }
 
-  validateLengthOfMortgage(): boolean {
+  private validateLengthOfMortgage(): boolean {
     return (
       this.lengthOfMortgage >= 5 &&
       this.lengthOfMortgage <= 30 &&
@@ -63,7 +57,17 @@ export class EventParameterValidator implements MortgageQueryParms {
     );
   }
 
-  validate(): ValidationResponse {
+  setParams(event: APIGatewayProxyEventV2): void {
+    const params = event?.queryStringParameters;
+    this.propertyPrice = this.convertToNumber(params?.propertyPrice);
+    this.downPayment = this.convertToNumber(params?.downPayment);
+    this.annualInterest = this.convertToNumber(params?.annualInterest);
+    this.lengthOfMortgage = this.convertToNumber(params?.lengthOfMortgage);
+    this.paymentSchedule = this.convertToNumber(params?.paymentSchedule);
+  }
+
+  validate(event: APIGatewayProxyEventV2): ValidationResponse {
+    this.setParams(event);
     const response: ValidationResponse = {
       success: false,
     };

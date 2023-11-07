@@ -1,5 +1,13 @@
+import "reflect-metadata";
 import { MortgageCalculator } from "./MortgageCalculator";
 import { MortgageQueryParms } from "../../../models/MortgageQueryParms";
+import { container } from "tsyringe";
+
+let testCalculator: MortgageCalculator;
+beforeEach(() => {
+  testCalculator = container.resolve(MortgageCalculator);
+});
+
 describe("Mortgage calculator tests", () => {
   it("assignes mortgageParams during contruction", () => {
     const props: MortgageQueryParms = {
@@ -9,8 +17,7 @@ describe("Mortgage calculator tests", () => {
       lengthOfMortgage: 30,
       paymentSchedule: 3,
     };
-    const testCalculator = new MortgageCalculator(props);
-
+    testCalculator.calculatePerPaymentSchedule(props);
     expect(testCalculator.mortgageParams).toEqual(props);
   });
 
@@ -22,8 +29,7 @@ describe("Mortgage calculator tests", () => {
       lengthOfMortgage: 30,
       paymentSchedule: 1,
     };
-    const testCalculator = new MortgageCalculator(props);
-
+    testCalculator.calculatePerPaymentSchedule(props);
     expect(testCalculator.numberOfPaymentsPerAnum).toEqual(26);
   });
 
@@ -35,8 +41,7 @@ describe("Mortgage calculator tests", () => {
       lengthOfMortgage: 30,
       paymentSchedule: 2,
     };
-    const testCalculator = new MortgageCalculator(props);
-
+    testCalculator.calculatePerPaymentSchedule(props);
     expect(testCalculator.numberOfPaymentsPerAnum).toEqual(24);
   });
 
@@ -48,8 +53,7 @@ describe("Mortgage calculator tests", () => {
       lengthOfMortgage: 30,
       paymentSchedule: 3,
     };
-    const testCalculator = new MortgageCalculator(props);
-
+    testCalculator.calculatePerPaymentSchedule(props);
     expect(testCalculator.numberOfPaymentsPerAnum).toEqual(12);
   });
 
@@ -61,7 +65,7 @@ describe("Mortgage calculator tests", () => {
       lengthOfMortgage: 30,
       paymentSchedule: 1,
     };
-    const testCalculator = new MortgageCalculator(props);
+    testCalculator.calculatePerPaymentSchedule(props);
     expect(typeof testCalculator.convertPaymentSchedule).toBe("function");
     expect(
       typeof testCalculator.convertPaymentSchedule(props.paymentSchedule)
@@ -76,8 +80,7 @@ describe("Mortgage calculator tests", () => {
       lengthOfMortgage: 30,
       paymentSchedule: NaN,
     };
-    const testCalculator = new MortgageCalculator(props);
-
+    testCalculator.calculatePerPaymentSchedule(props);
     expect(testCalculator.numberOfPaymentsPerAnum).toEqual(12);
   });
 
@@ -89,10 +92,11 @@ describe("Mortgage calculator tests", () => {
       lengthOfMortgage: 30,
       paymentSchedule: 1,
     };
-    const testCalculator = new MortgageCalculator(props);
-
+    testCalculator.calculatePerPaymentSchedule(props);
     expect(typeof testCalculator.calculatePerPaymentSchedule).toBe("function");
-    expect(typeof testCalculator.calculatePerPaymentSchedule()).toBe("number");
+    expect(typeof testCalculator.calculatePerPaymentSchedule(props)).toBe(
+      "number"
+    );
   });
 
   it("caclulates per payment schedule when we call calcutatePerPaymentSchedule method", () => {
@@ -103,12 +107,11 @@ describe("Mortgage calculator tests", () => {
       lengthOfMortgage: 30,
       paymentSchedule: 1,
     };
-    const testCalculator = new MortgageCalculator(props);
-
+    testCalculator.calculatePerPaymentSchedule(props);
     expect(typeof testCalculator.calculatePerPaymentSchedule).toBe("function");
-    expect(typeof testCalculator.calculatePerPaymentSchedule()).toBe("number");
-    expect(testCalculator.calculatePerPaymentSchedule()).toBe(
-      222.87982065285644
+    expect(typeof testCalculator.calculatePerPaymentSchedule(props)).toBe(
+      "number"
     );
+    expect(testCalculator.calculatePerPaymentSchedule(props)).toBe(222.88);
   });
 });

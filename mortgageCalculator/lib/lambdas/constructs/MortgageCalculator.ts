@@ -1,16 +1,11 @@
 import { PaymentScheduleEnum } from "../../../enums/PaymentSchedule.enum";
 import { MortgageQueryParms } from "../../../models/MortgageQueryParms";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class MortgageCalculator {
   mortgageParams: MortgageQueryParms;
   numberOfPaymentsPerAnum: number;
-
-  constructor(props: MortgageQueryParms) {
-    this.mortgageParams = props;
-    this.numberOfPaymentsPerAnum = this.convertPaymentSchedule(
-      props.paymentSchedule
-    );
-  }
 
   convertPaymentSchedule(paymentSchedule: number): number {
     switch (paymentSchedule) {
@@ -25,7 +20,11 @@ export class MortgageCalculator {
     }
   }
 
-  public calculatePerPaymentSchedule(): number {
+  public calculatePerPaymentSchedule(props: MortgageQueryParms): number {
+    this.mortgageParams = props;
+    this.numberOfPaymentsPerAnum = this.convertPaymentSchedule(
+      props.paymentSchedule
+    );
     const loanAmount =
       this.mortgageParams.propertyPrice - this.mortgageParams.downPayment;
 

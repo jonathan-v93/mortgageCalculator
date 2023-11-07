@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { APIGatewayProxyEventV2, Context } from "aws-lambda";
 import { MortgageLambdaHandler } from "./MortgageLambdaHandler";
 import { mock } from "jest-mock-extended";
@@ -46,7 +47,7 @@ describe("Test MotrgageLambdaHandler is working", () => {
     const expectedResponse = {
       statusCode: StatusCodeEnum.Success,
       headers: { "Content-Type": "application/json" },
-      body: "222.87982065285644",
+      body: "222.88",
     };
 
     const context = mock<Context>();

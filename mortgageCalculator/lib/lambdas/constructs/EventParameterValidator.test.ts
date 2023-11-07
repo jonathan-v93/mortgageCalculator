@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import {
   APIGatewayEventRequestContextV2,
   APIGatewayProxyEventHeaders,
@@ -6,6 +7,7 @@ import {
 import { EventParameterValidator } from "./EventParameterValidator";
 import { ValidationResponse } from "../../../models/ValidationReponse";
 import { ErrorMessageEnum } from "../../../enums/ErrorMessage.enum";
+import { container } from "tsyringe";
 
 const headers: APIGatewayProxyEventHeaders = {};
 const requestContext: APIGatewayEventRequestContextV2 = {
@@ -26,6 +28,11 @@ const requestContext: APIGatewayEventRequestContextV2 = {
   time: "",
   timeEpoch: 0,
 };
+let validator: EventParameterValidator;
+
+beforeEach(() => {
+  validator = container.resolve(EventParameterValidator);
+});
 
 describe("EventParameterValidation tests", () => {
   it("Given no query string, class creates params and defaults them all to zero", () => {
@@ -38,7 +45,8 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
+
+    validator.validate(event);
     expect(validator.propertyPrice).toBe(0);
     expect(validator.downPayment).toBe(0);
     expect(validator.annualInterest).toBe(0);
@@ -65,7 +73,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
+    validator.validate(event);
     expect(validator.propertyPrice).toBe(100);
     expect(validator.downPayment).toBe(10);
     expect(validator.annualInterest).toBe(0.05);
@@ -83,7 +91,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
+    validator.validate(event);
     expect(validator.downpaymentPercentage).toBe("10%");
   });
 
@@ -106,7 +114,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
+    validator.validate(event);
     expect(validator.propertyPrice).toBe(100);
     expect(validator.downPayment).toBe(10);
     expect(validator.annualInterest).toBe(0.05);
@@ -133,8 +141,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
-    const response: ValidationResponse = validator.validate();
+    const response: ValidationResponse = validator.validate(event);
     expect(validator.paymentSchedule).toBe(1);
     expect(response.success).toEqual(true);
   });
@@ -158,8 +165,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
-    const response: ValidationResponse = validator.validate();
+    const response: ValidationResponse = validator.validate(event);
     expect(validator.paymentSchedule).toBe(4);
     expect(response.success).toBe(false);
     expect(response.error).toBe(ErrorMessageEnum.PaymentScheduleError);
@@ -184,8 +190,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
-    const response: ValidationResponse = validator.validate();
+    const response: ValidationResponse = validator.validate(event);
     expect(validator.lengthOfMortgage).toBe(0);
     expect(validator.propertyPrice).toBe(0);
     expect(validator.downPayment).toBe(0);
@@ -213,8 +218,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
-    const response: ValidationResponse = validator.validate();
+    const response: ValidationResponse = validator.validate(event);
     expect(validator.propertyPrice).toBe(100);
     expect(response.success).toBe(false);
     expect(response.error).toBe(
@@ -241,8 +245,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
-    const response: ValidationResponse = validator.validate();
+    const response: ValidationResponse = validator.validate(event);
     expect(validator.lengthOfMortgage).toBe(35);
     expect(response.success).toBe(false);
     expect(response.error).toBe(ErrorMessageEnum.MortgageLength);
@@ -267,8 +270,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
-    const response: ValidationResponse = validator.validate();
+    const response: ValidationResponse = validator.validate(event);
     expect(validator.lengthOfMortgage).toBe(13);
     expect(response.success).toBe(false);
     expect(response.error).toBe(ErrorMessageEnum.MortgageLength);
@@ -293,8 +295,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
-    const response: ValidationResponse = validator.validate();
+    const response: ValidationResponse = validator.validate(event);
     expect(validator.annualInterest).toBe(2.78);
     expect(response.success).toBe(false);
     expect(response.error).toBe(ErrorMessageEnum.InterestInvalid);
@@ -319,8 +320,7 @@ describe("EventParameterValidation tests", () => {
       headers,
       requestContext,
     };
-    const validator = new EventParameterValidator(event);
-    const response: ValidationResponse = validator.validate();
+    const response: ValidationResponse = validator.validate(event);
     const expectedResponse = {
       success: true,
       data: {
